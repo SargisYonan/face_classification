@@ -6,6 +6,22 @@ Github: https://github.com/oarriaga
 Description: Train emotion classification model
 """
 
+## Sargis
+from optparse import OptionParser
+
+parser = OptionParser()
+parser.add_option("-t", "--threads", dest="threads",
+                  help="Select number of threads to run training on", default=1)
+parser.add_option("-e", "--epochs", dest="epochs", default=10,
+                  help="number of training epochs")
+
+(options, args) = parser.parse_args()
+
+threads = int(options.threads)
+epochs = int(options.epochs)
+
+print('Running ' + str(epochs) + ' training epochs with ' + str(threads) + ' threads')
+
 from keras.callbacks import CSVLogger, ModelCheckpoint, EarlyStopping
 from keras.callbacks import ReduceLROnPlateau
 from keras.preprocessing.image import ImageDataGenerator
@@ -17,13 +33,15 @@ from utils.preprocessor import preprocess_input
 
 # parameters
 batch_size = 32
-num_epochs = 10000
 input_shape = (64, 64, 1)
 validation_split = .2
 verbose = 1
 num_classes = 7
 patience = 50
-base_path = '../trained_models/emotion_models/'
+
+import os
+dir = os.path.dirname(__file__)
+base_path = os.path.join(dir, '../trained_models/emotion_models/')
 
 # data generator
 data_generator = ImageDataGenerator(
@@ -41,6 +59,11 @@ model.compile(optimizer='adam', loss='categorical_crossentropy',
               metrics=['accuracy'])
 model.summary()
 
+
+if (threads > 1):
+    multiprocess = True
+else:
+    multiprocess = False
 
 datasets = ['fer2013']
 for dataset_name in datasets:
@@ -68,5 +91,5 @@ for dataset_name in datasets:
     model.fit_generator(data_generator.flow(train_faces, train_emotions,
                                             batch_size),
                         steps_per_epoch=len(train_faces) / batch_size,
-                        epochs=num_epochs, verbose=1, callbacks=callbacks,
-                        validation_data=val_data)
+                        epochs=epochs, verbose=1, callbacks=callbacks,
+                        validation_data=val_data, workers=threads, use_multiprocessing=multiprocess)

@@ -5,6 +5,9 @@ from random import shuffle
 import os
 import cv2
 
+# sargis -- had to add this to get relative paths to work for the run.sh
+dir = os.path.dirname(__file__)
+
 class DataManager(object):
     """Class for loading fer2013 emotion classification dataset or
         imdb gender classification dataset."""
@@ -18,7 +21,7 @@ class DataManager(object):
         elif self.dataset_name == 'imdb':
             self.dataset_path = '../datasets/imdb_crop/imdb.mat'
         elif self.dataset_name == 'fer2013':
-            self.dataset_path = '../datasets/fer2013/fer2013.csv'
+            self.dataset_path = os.path.join(dir, '../../datasets/fer2013/fer2013.csv')
         elif self.dataset_name == 'KDEF':
             self.dataset_path = '../datasets/KDEF/'
         else:
