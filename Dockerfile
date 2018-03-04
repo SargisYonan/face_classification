@@ -7,6 +7,9 @@ RUN apt-get -y update && apt-get install -y python python-pip python-dev python-
 
 RUN pip install numpy scipy scikit-learn pillow tensorflow pandas h5py opencv-python==3.2.0.8 keras statistics pyyaml pyparsing cycler matplotlib Flask
 
+# install perf into image
+RUN apt-get update && apt-get install -y linux-perf && mv /usr/bin/perf_4.4 /usr/bin/perf
+
 # literally copy the file structure from local to image
 COPY . /.
 
