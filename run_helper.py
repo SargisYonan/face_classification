@@ -21,6 +21,7 @@ for i in range(0, threads):
 	argument += " "
 	argument += to_append
 
+print("*******************************************************************************************************")
 print("Running test with " + str(threads) + " threads -- size=X/" + str(divider))
 os.system("parallel --no-notice :::" + argument)
 
