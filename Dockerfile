@@ -10,6 +10,9 @@ RUN pip install numpy scipy scikit-learn pillow tensorflow pandas h5py opencv-py
 # install perf into image
 RUN apt-get install -y linux-tools
 
+# install parallel
+RUN apt-get install -y parallel
+
 # literally copy the file structure from local to image
 COPY . /.
 
