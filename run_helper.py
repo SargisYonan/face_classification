@@ -1,4 +1,5 @@
 from optparse import OptionParser
+import os
 
 parser = OptionParser()
 
@@ -13,10 +14,12 @@ threads = int(options.threads)
 divider = int(options.divider)
 
 
-to_append = "\"python face_classifier/src/throughput.py -d " + str(divider*threads) + "\" "
+to_append = "\"python face_classifier/src/throughput.py -d " + str(divider*threads) + "\""
 
 argument = ""
 for i in range(0, threads):
+	argument += " "
 	argument += to_append
 
-print argument
+os.system("parallel --no-notice :::" + argument)
+
